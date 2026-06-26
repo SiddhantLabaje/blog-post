@@ -1,0 +1,10 @@
+.actionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .actionButtons {
+    flex-direction: column;
+  }
+}

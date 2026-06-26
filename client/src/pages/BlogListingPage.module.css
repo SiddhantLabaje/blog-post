@@ -1,0 +1,11 @@
+.tableContainer {
+  max-height: calc(100vh - 380px);
+  min-height: 200px;
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .tableContainer {
+    max-height: none;
+  }
+}

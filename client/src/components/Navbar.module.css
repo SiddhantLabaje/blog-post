@@ -1,0 +1,10 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.brandBox {
+  display: flex;
+  align-items: center;
+}

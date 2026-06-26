@@ -1,0 +1,21 @@
+.thumbnail {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+.postContent {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .thumbnail {
+    height: 200px;
+  }
+}
