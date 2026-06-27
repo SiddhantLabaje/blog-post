@@ -13,10 +13,22 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
+const allowedOrigins = (process.env.CLIENT_URL || '*')
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, '')); // strip trailing slashes
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Render health checks)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
