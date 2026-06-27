@@ -13,18 +13,19 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-const allowedOrigins = (process.env.CLIENT_URL || '*')
-  .split(',')
-  .map((o) => o.trim().replace(/\/$/, '')); // strip trailing slashes
-
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Render health checks)
+    // Allow requests with no origin (curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error(`CORS: origin ${origin} not allowed`));
+    // Allow all Vercel deployments and preview URLs
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    // Allow localhost for development
+    if (origin.startsWith('http://localhost')) return callback(null, true);
+    // Allow explicitly configured CLIENT_URL
+    const configured = (process.env.CLIENT_URL || '').replace(/\/$/, '');
+    if (configured === '*' || configured === origin) return callback(null, true);
+    // Reject everything else
+    return callback(null, false);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
